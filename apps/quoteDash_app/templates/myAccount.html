@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>My Account</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        * {
+            padding:2px;
+        }    
+    </style>
+</head>
+<body>
+    <div class="banner" style="background-color: rgb(162, 197, 231);height: 50px; width: 100%; display:inline-block; border-bottom:2px solid black;">
+            <h3 style="display: inline-block">Welcome {{ request.session.first_name }}</h3>
+            <a style="float:right" href="/logout" name="logout">Logout</a> <a style="float:right" href="/quotes" name="back">Back</a>
+    </div>
+    <h4>Edit My Account</h4>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form action="/updateAccount" method="post">
+        {% csrf_token %}
+        First Name<input type="text" name="first_name" value="{{ user.first_name}}"><br><br>
+        Last Name<input type="text" name="last_name" value="{{user.last_name}}"><br><br>
+        Email Name<input type="text" name="email" value="{{user.email}}"><br><br>
+        <input type="submit" value="Update">
+    </form>
+</body>
+</html>

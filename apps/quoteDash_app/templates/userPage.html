@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>User Quotes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        * {
+            padding:2px;
+        }    
+    </style>
+</head>
+<body>
+    <div class="banner" style="background-color: rgb(162, 197, 231);height: 50px; width: 100%; display:inline-block; border-bottom:2px solid black;">
+            <h3 style="display: inline-block">Welcome {{ request.session.first_name }}</h3>
+            <a style="float:right" href="/logout" name="logout">Logout</a> <a style="float:right" href="/quotes" name="back">Back</a>
+    </div>
+    <h4>{{ user.first_name}} {{ user.last_name}}'s Quotes:</h4>
+    {% for quote in quotes %}
+        <div style="height:80px; width:300px; border: 2px solid black; overflow-y: scroll">
+            {{quote.author}}: "{{quote.quote_text}}""
+
+        </div><br>
+
+    {% endfor %}
+</body>
+</html>

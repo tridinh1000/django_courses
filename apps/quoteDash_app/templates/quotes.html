@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Quote Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        * {
+            padding:2px;
+        }    
+    </style>
+</head>
+<body>
+    <div class="banner" style="background-color: rgb(162, 197, 231);height: 50px; width: 100%; display:inline-block; border-bottom:2px solid black;">
+            <h3 style="display: inline-block">Welcome {{ request.session.first_name }}</h3>
+            <a style="float:right" href="/logout" name="logout">Logout</a> <a style="float:right" href="/myaccount/{{request.session.user_id}}" name="editAccount">Edit My Account</a>
+    </div>
+    <div style="display: inline-block; vertical-align: top">
+        <h5>Quotes</h5>
+        {% for quote in quotes %}
+            <div style="height:100px; width:400px; border: 2px solid black; overflow-y: scroll">
+                {{quote.author}}: "{{quote.quote_text}}"<br>
+                posted by: <a href="user/{{quote.posted_by.id}}">{{quote.posted_by.first_name}} {{quote.posted_by.last_name}}</a>
+                    <div>
+                        <form action="/likequote/{{quote.id}}" method="post">
+                            {% csrf_token %}
+                            {{quote.liked_users.count}} people liked this
+                            <input type="hidden" name="quote_id" value="{{quote.id}}">
+                            <input style="margin-left: 20px; padding: 1px; font-size:10px;" class="btn btn-info btn-sm" type="submit" value="Like" >
+                        </form>
+                    </div>
+
+
+                {% if request.session.user_id == quote.posted_by.id %}
+                    <form action="/delete_quote/{{quote.id}}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="quote_id" value="{{quote.id}}">
+                        <input style="margin-left: 20px; padding: 1px; font-size:10px;" class="btn btn-danger btn-sm" type="submit" value="Delete" >
+                    </form>
+                {% endif %}
+            </div><br>
+        {% endfor %}
+    </div>
+    <div style="display: inline-block; vertical-align: top; margin-left:50px;">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form action="/addquote" method="post">
+            {% csrf_token %}
+            <h5>Add a Quote</h5>
+            Author: <input type="text" name="author"><br><br>
+            Quote: <input type="text" name="quoteText"><br><br>
+            <input style="margin-left:150px" class="btn btn-info"type="submit" value="Submit">
+        </form>
+
+
+    </div>
+
+</body>
+</html>
